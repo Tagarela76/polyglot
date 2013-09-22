@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: WordPress 3.6.1\n"
 "Report-Msgid-Bugs-To: http://wppolyglots.wordpress.com\n"
 "POT-Creation-Date: 2013-08-01 17:13:31+00:00\n"
-"PO-Revision-Date: 2013-09-21 19:01+0200\n"
+"PO-Revision-Date: 2013-09-22 21:53+0200\n"
 "Last-Translator: Sergey Biryukov <sergeybiryukov.ru@gmail.com>\n"
 "Language-Team: ru.wordpress.org <sergeybiryukov.ru@gmail.com>\n"
 "Language: ru_RU\n"
@@ -12372,6 +12372,10 @@ msgstr "Группа пользователя"
 msgid "first group"
 msgstr "Первая группа"
 
+#: wp-admin/user-edit.php:297
+msgid "Add Group"
+msgstr "Добавить группу"
+
 #: wp-admin/user-edit.php:295
 msgid "second group"
 msgstr "Вторая группа"
@@ -12403,6 +12407,18 @@ msgstr "Преподаватель"
 #: wp-admin/user-edit.php:302
 msgid "StudentGroup"
 msgstr "Группа студента"
+
+#: wp-admin/user-edit.php:302
+msgid "Add SubGroup"
+msgstr "Добавить подгруппу"
+
+#: wp-admin/user-edit.php:302
+msgid "Group Name"
+msgstr "Имя группы"
+
+#: wp-admin/user-edit.php:302
+msgid "Sub Group Name"
+msgstr "Имя подгруппы"
 
 #: wp-admin/user-edit.php:295
 msgid "Display name publicly as"

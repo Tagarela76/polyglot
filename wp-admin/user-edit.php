@@ -256,6 +256,16 @@ $user_role  = array_shift( $user_roles );
 // print the full list of roles with the primary one selected.
 wp_dropdown_roles($user_role);
 
+//get user gorups for user group list display
+$allUserGroups = getUserGroupList();
+if($profileuser->user_sub_group_id != 0){
+    $groupId = $profileuser->user_group_id;
+}else{
+    $groupId = $allUserGroups[0]->id;
+}
+
+$userSubGroup = getUserSubGroupByUserGroup($groupId);
+
 // print the 'no role' option. Make it selected if the user has no role yet.
 if ( $user_role )
 	echo '<option value="">' . __('&mdash; No role for this site &mdash;') . '</option>';
@@ -294,40 +304,70 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 <tr>
     <th><label for="user_group"><?php _e('UserGroup')?></label></th>
     <td>
-        <select name="user_group" id="user_group" onchange='showStudentGroup();'>
-            <option value="student" <?php if($profileuser->user_group=="student"):?> selected="selected" <?php endif; ?>>
-                <?php _e('student')?>
-            </option>
-            <option value="teatcher" <?php if($profileuser->user_group=="teatcher"):?> selected="selected" <?php endif; ?>>
-                <?php _e('teatcher')?>
-            </option>
+        <select name="user_group" id="user_group" onchange='getSubGroupList();'>
+            <?php foreach ( $allUserGroups as $group ) { ?>
+            <option value="<?php echo $group->id ?>" <?php if($profileuser->user_group_id == $group->id):?>selected="selected"<?php endif ?>><?php echo $group->description; ?></option>
+            <?php } ?>
         </select>
+        <label for="user_group"><?php _e('Add Group')?></label> <input type="checkbox" onclick="showAddNewGroupContainer()" id="addNewGroupContainerCheckbox">
     </td>
 </tr>
 
-<tr id="student_group_container" hidden="hidden">
-    <th><label for="student_group"><?php _e('StudentGroup')?></label></th>
+<tr id='showAddNewGroupContainer' hidden="hidden">
+    <th><label for="add_user_group"><?php _e('Add Group')?></label></th>
+    <td border="1">
+        <table >
+            <tr>
+                <td>
+                    <?php _e('Group Name')?>
+                </td>
+                <td>
+                    <input type='text' id="groupName">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <input type="button" value="<?php _e('Add Group')?>" onclick="addNewGorup()">
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr id="subGroupListcontainer">
+    <th><label for="sub_group"><?php _e('StudentGroup')?></label></th>
     <td>
-        <select name="student_group" id="student_group">
-            <option value="1" <?php if($profileuser->student_group == 1):?> selected="selected" <?php endif; ?>>
-                <?php _e('first group')?>
-            </option>
-            <option value="2" <?php if($profileuser->student_group == 2):?> selected="selected" <?php endif; ?>>
-                <?php _e('second group')?>
-            </option>
-            <option value="3" <?php if($profileuser->student_group == 3):?> selected="selected" <?php endif; ?>>
-                <?php _e('third group')?>
-            </option>
-            <option value="4" <?php if($profileuser->student_group == 4):?> selected="selected" <?php endif; ?>>
-                <?php _e('fourth group')?>
-            </option>
-            <option value="5" <?php if($profileuser->student_group == 5):?> selected="selected" <?php endif; ?>>
-                <?php _e('fifth group')?>
-            </option>
-            <option value="6" <?php if($profileuser->student_group == 6):?> selected="selected" <?php endif; ?>>
-                <?php _e('sixth group')?>
-            </option>
+        <select name="user_sub_group" id="user_sub_group">
+            <?php foreach ( $userSubGroup as $group ) { ?>
+            <option value="<?php echo $group->id ?>" <?php if($profileuser->user_sub_group_id == $group->id):?>selected="selected"<?php endif ?>><?php echo $group->description; ?></option>
+            <?php } ?>
         </select>
+        <label for="user_sub_group"><?php _e('Add SubGroup')?></label> <input type="checkbox" onclick="showAddNewSubGroupContainer()" id="addNewSubGroupContainerCheckbox">
+    </td>
+</tr>
+
+<tr id='showAddNewSubGroupContainer' hidden="hidden">
+    <th><label for="add_user_sub_group"><?php _e('Add Sub Group')?></label></th>
+    <td border="1">
+        <table >
+            <tr>
+                <td>
+                    <?php _e('Sub Group Name')?>
+                </td>
+                <td>
+                    <input type='text' id="subGroupName">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <input type="button" value="<?php _e('Add Sub Group')?>" onclick="addNewSubGorup()">
+                </td>
+            </tr>
+        </table>
     </td>
 </tr>
     
@@ -475,24 +515,91 @@ break;
 ?>
 <script type="text/javascript">
     jQuery(document).ready(function(){
-        showStudentGroup();
+        //getSubGroupList();
     });
 	if (window.location.hash == '#password') {
 		document.getElementById('pass1').focus();
 	}
+                
         /**
-         * show student group conteiner
+         * 
+         * show Add New Group Container
+         * 
+         * @returns {undefined}
          */
-        function showStudentGroup()
+        function showAddNewGroupContainer()
         {
-            var user_group = jQuery('#user_group').val();
-            
-            if(user_group == 'student'){
-                jQuery('#student_group_container').show();
+            var isShowAddNewGroup = jQuery('#addNewGroupContainerCheckbox').is(':checked');
+            if(isShowAddNewGroup){
+                jQuery('#showAddNewGroupContainer').show();
             }else{
-                jQuery('#student_group_container').hide();
+                jQuery('#showAddNewGroupContainer').hide();
             }
         }
+        
+        /**
+         * 
+         * add new group
+         * 
+         * @returns {undefined}
+         */
+        function addNewGorup()
+        {
+            var groupName = jQuery('#groupName').val();
+              jQuery.ajax({
+                type : "post",
+                dataType : "text",
+                url : 'admin-ajax.php?action=addGroupAjax',
+                data : {groupName: groupName},
+                success: function(response) {
+                    jQuery('#user_group').html(response);
+                }
+                });   
+        }
+        
+        
+        function showAddNewSubGroupContainer()
+        {
+            var isShowAddNewSubGroupContainer = jQuery('#addNewSubGroupContainerCheckbox').is(':checked');
+            if(isShowAddNewSubGroupContainer){
+                jQuery('#showAddNewSubGroupContainer').show();
+            }else{
+                jQuery('#showAddNewSubGroupContainer').hide();
+            }
+        }
+        
+        function addNewSubGorup()
+        {
+            var groupSubName = jQuery('#subGroupName').val();
+            var groupId = jQuery('#user_group').val();
+            
+              jQuery.ajax({
+                type : "post",
+                dataType : "text",
+                url : 'admin-ajax.php?action=addSubGroupAjax',
+                data : {groupId: groupId, description: groupSubName},
+                success: function(response) {
+                    getSubGroupList();
+                }
+                });   
+        }
+        
+        function getSubGroupList()
+        {
+            var groupId = jQuery('#user_group').val();
+            
+            jQuery.ajax({
+                type : "post",
+                dataType : "text",
+                url : 'admin-ajax.php?action=getSubGroupListHtml',
+                data : {groupId: groupId},
+                success: function(response) {
+                    jQuery('#user_sub_group').html(response);
+                }
+                });   
+        }
+        
+        
 </script>
 <?php
 include( ABSPATH . 'wp-admin/admin-footer.php');

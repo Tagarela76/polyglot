@@ -1387,8 +1387,8 @@ function wp_insert_user( $userdata ) {
 		}
 		$user_nicename = $alt_user_nicename;
 	}
-
-	$data = compact( 'user_pass', 'user_email', 'user_url', 'user_nicename', 'display_name', 'user_registered', 'user_group', 'student_group' );
+        
+	$data = compact( 'user_pass', 'user_email', 'user_url', 'user_nicename', 'display_name', 'user_registered', 'user_group_id', 'user_sub_group_id' );
 	$data = wp_unslash( $data );
 
 	if ( $update ) {

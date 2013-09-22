@@ -64,18 +64,17 @@ function edit_user( $user_id = 0 ) {
 
         //get user group for update
         if( isset( $_POST['user_group'])){
-                $user->user_group = sanitize_text_field( $_POST['user_group'] );
+                $user->user_group_id = sanitize_text_field( $_POST['user_group'] );
                 //get student group if we need
-                if($_POST['user_group'] == 'student'){
-                    if(isset( $_POST['student_group'] )){
-                        $user->student_group = $_POST['student_group'];
+                if($_POST['user_group'] != ''){
+                    if(isset( $_POST['user_sub_group'] )){
+                        $user->user_sub_group_id = $_POST['user_sub_group'];
                     }
                 }else{
-                    $user->student_group = 0;
+                    $user->user_sub_group_id = 0;
                 }
         }
-        
-        
+                
 	if ( isset( $_POST['email'] ))
 		$user->user_email = sanitize_text_field( $_POST['email'] );
 	if ( isset( $_POST['url'] ) ) {
@@ -383,4 +382,25 @@ function default_password_nag() {
 	printf( '<a href="%s">' . __('Yes, take me to my profile page') . '</a> | ', get_edit_profile_url( get_current_user_id() ) . '#password' );
 	printf( '<a href="%s" id="default-password-nag-no">' . __('No thanks, do not remind me again') . '</a>', '?default_password_nag=0' );
 	echo '</p></div>';
+}
+
+
+/**
+ * 
+ * @global type $wpdb
+ * 
+ * @return std[]
+ */
+function getUserGroupList()
+{
+    global $wpdb;
+    $user_group = $wpdb->get_results("SELECT * FROM polyglot_user_group");
+    return $user_group;
+}
+
+function getUserSubGroupByUserGroup($groupId)
+{
+    global $wpdb;
+    $user_sub_group = $wpdb->get_results("SELECT * FROM polyglot_users_subgroup WHERE group_id=".$groupId);
+    return $user_sub_group;
 }
