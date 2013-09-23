@@ -27,20 +27,16 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-add_action('admin_menu', 'function_name');
+define( 'PUG_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . dirname( plugin_basename( __FILE__ ) ) );
 
-function function_name()
-{
-    if (function_exists('add_options_page'))
-    {
-        //Добавляем пункт меню в Параметры
-        //add_options_page($page_title, $menu_title, $capability, $menu_slug, $function);
-        add_options_page('Страница настроек моего плагина', 'Polyglot User Groups', 'manage_options', 'MypluginUniqIdentifictor', 'MyPluginPageOptions');
-    }
-}
+require_once('classes/adminUserGroup.class.php');
+require_once('functions/functions.php');
+//create admin object
+$wpAdmin = new adminUserGroup();
+//add poliglot plugin to menu
+add_action('admin_menu', array($wpAdmin, 'wp_add_polyglot_user_group_admin'));
 
-function MyPluginPageOptions()
-{
-echo "<h2>Настройки моего плагина.</h2>";
-}
+
+
+
 ?>
