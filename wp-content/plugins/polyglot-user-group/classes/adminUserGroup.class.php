@@ -47,6 +47,7 @@ class adminUserGroup
      */
     function wpAddPolyglotUserGroupAdmin()
     {
+        wp_enqueue_style( WP_PLUGIN_DIR.'/assets/css/bootstrap.css', false, $this->version, 'screen');
         if (function_exists('add_options_page')) {
             add_options_page('Polyglot User Group Settings', 'Polyglot User Groups', 'manage_options', 'MypluginUniqIdentifictor', array($this, 'wpPolyglotUserGroupPageSettings'));
         }
