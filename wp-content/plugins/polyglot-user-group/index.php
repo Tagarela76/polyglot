@@ -27,16 +27,29 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+global $wpdb;
+
+define('USER_GROUP_TABLE_NAME', $wpdb->prefix.'user_group');
 define( 'PUG_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . dirname( plugin_basename( __FILE__ ) ) );
 
 require_once('classes/adminUserGroup.class.php');
-require_once('functions/functions.php');
-//create admin object
+require_once('classes/polyglotUserGroup.class.php');
+
 $wpAdmin = new adminUserGroup();
-//add poliglot plugin to menu
-add_action('admin_menu', array($wpAdmin, 'wp_add_polyglot_user_group_admin'));
+
+register_activation_hook( __FILE__, array( $wpAdmin, 'wpActivateUserGroupPlugin' ) );
+register_deactivation_hook( __FILE__, array( $wpAdmin, 'wpDeactivateUserGroupPlugin' ));
+//register_uninstall_hook( __FILE__, 'wpDeactivateUserGroupPlugin');
+/**
+ * add plugin to admin menu
+ */
+add_action('admin_menu', array($wpAdmin, 'wpAddPolyglotUserGroupAdmin'));
+
+require_once('functions/functions.php');        
 
 
 
 
-?>
+
+
+

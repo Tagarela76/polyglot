@@ -1,16 +1,27 @@
 <?php
-
-function pug_register_settings() {
-	register_setting( 'getUserGroupList', 'getUserGroupList' );
-	
-}
-function getUserGroupList()
+   
+/**
+ * 
+ * function for getting poliglot user group list
+ * 
+ * @global type $wpdb
+ * @return \polyglotUserGroup[]
+ */
+function getPolyglotUserGroups()
 {
-    //global $wpdb;
-    //var_dump('sef');die();
-}
-
-if(is_admin()){
-add_action('admin_init', 'pug_register_settings');
+    global $wpdb;
+    
+    $polyglotUserGroups = array();
+    
+    $results = $wpdb->get_results( "SELECT * FROM ".USER_GROUP_TABLE_NAME, ARRAY_A);
+    
+    foreach($results as $result){
+        $polyglotUserGroup = new polyglotUserGroup();
+        $polyglotUserGroup->initByArray($result);
+        $polyglotUserGroups[] = $polyglotUserGroup;
+    }
+    
+    
+    return $polyglotUserGroups;
 }
 ?>

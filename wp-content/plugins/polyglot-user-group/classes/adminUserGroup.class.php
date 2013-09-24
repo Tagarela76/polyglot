@@ -12,22 +12,50 @@ class adminUserGroup
     }
 
     /**
-     * add polyglot_user_group_admin to wordPess admin
+     * 
+     * function for activate user group plugin
+     * create user_group table
+     * 
+     * @global type $wpdb
      */
-    function wp_add_polyglot_user_group_admin()
+    function wpActivateUserGroupPlugin()
+    {
+        global $wpdb;
+        //create table
+        $wpdb->query("CREATE TABLE IF NOT EXISTS `" . USER_GROUP_TABLE_NAME . "` (
+                 `id` int(11) NOT NULL AUTO_INCREMENT,
+                 `description` varchar(2000) CHARACTER SET utf8 NOT NULL,
+                  UNIQUE KEY `id` (`id`)
+                  ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1");
+    }
+
+    /**
+     * 
+     * function for deactivate user group plugin
+     * delete user_group table
+     * 
+     * @global type $wpdb
+     */
+    function wpDeactivateUserGroupPlugin()
+    {
+        global $wpdb;
+        $wpdb->query("DROP TABLE IF EXISTS " . USER_GROUP_TABLE_NAME);
+    }
+
+    /**
+     * add polyglot_user_group_admin to wordPess admin panel
+     */
+    function wpAddPolyglotUserGroupAdmin()
     {
         if (function_exists('add_options_page')) {
-            //add_options_page($page_title, $menu_title, $capability, $menu_slug, $function);
-            add_options_page('Страница настроек моего плагина', 'Polyglot User Groups', 'manage_options', 'MypluginUniqIdentifictor', array($this, 'wp_polyglot_user_page'));
+            add_options_page('Polyglot User Group Settings', 'Polyglot User Groups', 'manage_options', 'MypluginUniqIdentifictor', array($this, 'wpPolyglotUserGroupPageSettings'));
         }
     }
 
-    function wp_polyglot_user_page()
+    function wpPolyglotUserGroupPageSettings()
     {
-        include( PUG_PLUGIN_DIR.'/frontend/wp.edit.users.group.php' );
-        showAddGroup();
+       include( PUG_PLUGIN_DIR.'/view/wp.edit.users.group.php' );
     }
 
 }
-
 ?>
