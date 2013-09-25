@@ -4,13 +4,11 @@ require_once("../../../../../wp-config.php");
 global $wpdb; // this is how you get access to the database
 $table = $wpdb->prefix.'user_group';
 
-$description = $_POST['description'];
+$groupIds = $_POST['groupIds'];
 
-$data = array(
-    'description' => $description
-);
-if (!is_null($description)) {
-    $wpdb->insert($table, $data);
+if($groupIds!=''){
+    $query = "DELETE FROM ".$table." WHERE id IN(".$groupIds.")";
+    $wpdb->query($query);
 }
 die();
 

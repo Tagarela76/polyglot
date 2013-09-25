@@ -1,7 +1,5 @@
 <?php
 $polyglotUserGroups = getPolyglotUserGroups();
-
-
 ?>
 <style>
 		body { font-size: 62.5%; }
@@ -15,30 +13,54 @@ $polyglotUserGroups = getPolyglotUserGroups();
 		.ui-dialog .ui-state-error { padding: .3em; }
 		.validateTips { border: 1px solid transparent; padding: 0.3em; }
 </style>
-
-<table>
-    <tr>
-        <td>
+<div style="margin-top: 10px">
+<table class="table table-condensed table-bordered table table-striped" id="userGroupContainer">
+    <tr class="active" >
+        <td width="10%">
+            select
+        </td>
+        <td width="10%">
             Group ID
         </td>
-        <td>
+        <td width="80%">
             Group Name
         </td>
     </tr>
     <?php foreach($polyglotUserGroups as $polyglotUserGroup){?>
-        <tr>
-            <td>
+        <tr class="success">
+            <td width="10%">
+                <input type='checkbox' id="group_<?php echo $polyglotUserGroup->getId();?>"
+                       value="<?php echo $polyglotUserGroup->getId();?>">
+            </td>
+            <td width="10%">
                 <?php echo $polyglotUserGroup->getId(); ?>
             </td>
-            <td>
+            <td width="80%">
                 <?php echo $polyglotUserGroup->getDescription(); ?>
             </td>
         </tr>
             
     <?php } ?>
 </table>
-
+</div>
 <input type="button" value='Create Group' class="btn-inverse" id="create-user-group">
+<input type="button" value='Delete Groups' class="btn-inverse" id="delete-user-group">
+<div style="margin-top: 10px">
+<select onchange="getUserSubGroup()" id="userGroupList">
+    <?php foreach($polyglotUserGroups as $polyglotUserGroup){ ?>
+    <option value="<?php echo $polyglotUserGroup->getId() ?>">
+            <?php echo $polyglotUserGroup->getDescription(); ?>
+        </option>
+    <?php } ?>
+</select>
+</div>
+
+<div style="margin-top: 10px">
+<table class="table table-condensed table-bordered table table-striped" id="userSubGroupContainer">
+    
+</table>
+</div>
+
 <!--Dialog window-->
 <div id="dialog-form" title="Create new user">
 	<p class="validateTips">Add new User Group</p>
@@ -47,6 +69,18 @@ $polyglotUserGroups = getPolyglotUserGroups();
 	<fieldset>
 		<label for="groupDescription">Group Description</label>
 		<input type="text" name="groupDescription" id="groupDescription" class="text ui-widget-content ui-corner-all" />
+	</fieldset>
+	</form>
+</div>
+<!--Delete dialog form window-->
+<div id="delete-dialog-form" title="Delete user group">
+	<p class="validateTips">Add new User Group</p>
+
+	<form>
+	<fieldset>
+		<label for="groupDescription">Delete user groups with id:</label>
+		<div id="rowsForDelete"><div>
+                <input type="hidden" name="rowsToDeleteString" id="rowsToDeleteString" />
 	</fieldset>
 	</form>
 </div>

@@ -41,6 +41,7 @@ $(function() {
         modal: true,
         buttons: {
             "Add Group": function() {
+                var that = this;
                 var description = groupDescription.val();
                 var ajaxurl = '../wp-content/plugins/polyglot-user-group/assets/ajax/saveUserGroup.php';
                 var data = {
@@ -49,7 +50,10 @@ $(function() {
                 };
                 
                 $.post(ajaxurl, data, function(response) {
-            		console.log(response);
+            		$("#groupDescription").val('');
+                        $(that).dialog("close");
+                        location.reload();
+                        
                 });
             },
             Cancel: function() {
@@ -61,9 +65,89 @@ $(function() {
         }
     });
 
+
+    $("#delete-dialog-form").dialog({
+        autoOpen: false,
+        height: 300,
+        width: 350,
+        modal: true,
+        buttons: {
+            "DELETE": function() {
+                var that = this;
+                var groupIds = $('#rowsForDelete').html();
+                var ajaxurl = '../wp-content/plugins/polyglot-user-group/assets/ajax/deleteUserGroup.php';
+                var data = {
+                    groupIds: groupIds
+                };
+                
+                $.post(ajaxurl, data, function(response) {
+            		$("#groupDescription").val('');
+                        $(that).dialog("close");
+                        location.reload();
+                        
+                });
+            },
+            Cancel: function() {
+                $(this).dialog("close");
+            }
+        },
+        close: function() {
+            allFields.val("").removeClass("ui-state-error");
+        }
+    });
+    
+    //open add group dialog
     $("#create-user-group")
             .button()
             .click(function() {
         $("#dialog-form").dialog("open");
     });
+    
+    //open add group dialog
+    $("#delete-user-group")
+            .button()
+            .click(function() {
+        var openDialog = getRowsToDelete();
+        if(openDialog){
+            $("#delete-dialog-form").dialog("open");
+        }else{
+            alert('check user group first');
+        }
+    });
+    
+    getUserSubGroup();
 });
+
+function getRowsToDelete()
+{
+    var rowsToDelete = new Array();
+    var rowsToDeleteToString = "";
+    var checkboxes = $("#userGroupContainer").find("input[type='checkbox']");
+
+    checkboxes.each(function(i) {
+        var id = this.value;
+        if (this.checked) {
+            rowsToDelete.push(id);
+        }
+    });
+    rowsToDeleteToString = rowsToDelete.join(',');
+    if(rowsToDeleteToString==''){
+        return false;
+    }
+    $('#rowsForDelete').html(rowsToDeleteToString);
+    return true;
+}
+
+function getUserSubGroup()
+{
+    var userGroupId = $('#userGroupList').val();
+    
+    var ajaxurl = '../wp-content/plugins/polyglot-user-group/assets/ajax/getUserSubGroup.php';
+    var data = {
+        groupId: userGroupId
+    };
+
+    $.post(ajaxurl, data, function(response) {
+        $('#userSubGroupContainer').html(response)
+    });
+}
