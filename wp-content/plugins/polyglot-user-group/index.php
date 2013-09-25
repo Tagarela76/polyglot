@@ -37,7 +37,9 @@ define( 'PUG_PLUGIN_DIR', WP_PLUGIN_DIR . '/polyglot-user-group');
 //$path = WP_PLUGIN_DIR.'/polyglot-user-group';
 require_once('classes/adminUserGroup.class.php');
 require_once('classes/polyglotUserGroup.class.php');
-require_once('functions/functions.php');        
+require_once('functions/functions.php');
+require_once('functions/functions.php');
+require_once('functions/functions.php');
 
 $wpAdmin = new adminUserGroup();
 
@@ -50,6 +52,7 @@ register_deactivation_hook( __FILE__, array( $wpAdmin, 'wpDeactivateUserGroupPlu
  */
 add_action('admin_init', 'polyglotUserGroupStylesInit');
 add_action('admin_menu', array($wpAdmin, 'wpAddPolyglotUserGroupAdmin'));
+add_action('wp_ajax_my_action', 'my_action_callback');
 
 
 

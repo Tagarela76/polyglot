@@ -1,63 +1,69 @@
-/**
- * Dialog Window for add user group
- * 
- * @returns null
- */
-function AddUserGroup() {
-    this.divId = '';
-    this.isLoaded = false;
+$ = jQuery;
+$(function() {
+    var groupDescription = $("#groupDescription"),
+            allFields = $([]).add(groupDescription),
+            tips = $(".validateTips");
 
-    this.iniDialog = function(divId) {
-        divId = typeof divId !== 'undefined' ? divId : this.divId;
-        if (divId != this.divId) {
-            this.divId = divId;
+    function updateTips(t) {
+        tips
+                .text(t)
+                .addClass("ui-state-highlight");
+        setTimeout(function() {
+            tips.removeClass("ui-state-highlight", 1500);
+        }, 500);
+    }
+
+    function checkLength(o, n, min, max) {
+        if (o.val().length > max || o.val().length < min) {
+            o.addClass("ui-state-error");
+            updateTips("Length of " + n + " must be between " +
+                    min + " and " + max + ".");
+            return false;
+        } else {
+            return true;
         }
+    }
 
-        var that = this;
-        jQuery("#" + divId).dialog({
-            width: 350,
-            height: 300,
-            autoOpen: false,
-            resizable: true,
-            dragable: true,
-            modal: true,
-            buttons: {
-                'Cancel': function() {
-                    that.isLoaded = false;
-                    $(this).dialog('close');
-                    that.allUsers = [];
-                },
-                'Save': function() {
-                    that.save();
-                    $(this).dialog('close');
-                }
+    function checkRegexp(o, regexp, n) {
+        if (!(regexp.test(o.val()))) {
+            o.addClass("ui-state-error");
+            updateTips(n);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    $("#dialog-form").dialog({
+        autoOpen: false,
+        height: 300,
+        width: 350,
+        modal: true,
+        buttons: {
+            "Add Group": function() {
+                var description = groupDescription.val();
+                var ajaxurl = '../wp-content/plugins/polyglot-user-group/assets/ajax/saveUserGroup.php';
+                var data = {
+                    action: 'my_action_callback',
+                    description: description
+                };
+                
+                $.post(ajaxurl, data, function(response) {
+            		console.log(response);
+                });
+            },
+            Cancel: function() {
+                $(this).dialog("close");
             }
-        });
-    }
-
-    this.openDialog = function() {
-        jQuery('#addUserGroup').html('');
-        jQuery('#' + this.divId).dialog('open');
-        if (!this.isLoaded) {
-            this.loadContent();
+        },
+        close: function() {
+            allFields.val("").removeClass("ui-state-error");
         }
-        return false;
-    }
+    });
 
-    this.loadContent = function() {
-        var that = this;
-       
-    }
-
-    this.save = function() {
-    }
-}
-
-function UserGroupDialog() {
-    this.AddUserGroup = new AddUserGroup();
-}
-
-jQuery(function() {
-    //	ini global object
-    userGroupDialog.AddUserGroup.iniDialog();
+    $("#create-user-group")
+            .button()
+            .click(function() {
+        $("#dialog-form").dialog("open");
+    });
 });
