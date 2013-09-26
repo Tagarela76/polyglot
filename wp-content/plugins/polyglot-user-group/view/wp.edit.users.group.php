@@ -43,8 +43,8 @@ $polyglotUserGroups = getPolyglotUserGroups();
     <?php } ?>
 </table>
 </div>
-<input type="button" value='Create Group' class="btn-inverse" id="create-user-group">
-<input type="button" value='Delete Groups' class="btn-inverse" id="delete-user-group">
+<input type="button" value='Create Group' class="btn" id="create-user-group">
+<input type="button" value='Delete Groups' class="btn" id="delete-user-group">
 <div style="margin-top: 10px">
 <select onchange="getUserSubGroup()" id="userGroupList">
     <?php foreach($polyglotUserGroups as $polyglotUserGroup){ ?>
@@ -61,6 +61,8 @@ $polyglotUserGroups = getPolyglotUserGroups();
 </table>
 </div>
 
+<input type="button" value='Create Sub Group' class="btn" id="create-user-subGroup">
+<input type="button" value='Delete Sub Groups' class="btn" id="delete-user-subGroup">
 <!--Dialog window-->
 <div id="dialog-form" title="Create new user">
 	<p class="validateTips">Add new User Group</p>
@@ -74,7 +76,7 @@ $polyglotUserGroups = getPolyglotUserGroups();
 </div>
 <!--Delete dialog form window-->
 <div id="delete-dialog-form" title="Delete user group">
-	<p class="validateTips">Add new User Group</p>
+	<p class="validateTips">Delete User Group</p>
 
 	<form>
 	<fieldset>
@@ -85,4 +87,26 @@ $polyglotUserGroups = getPolyglotUserGroups();
 	</form>
 </div>
 
+<!--Add sub user group dialog form window-->
+<div id="dialog-add-sub-group-form" title="Add user Sub Group">
+	<p class="validateTips">Add new User Sub Group</p>
+	<form>
+	<fieldset>
+		<label for="subGroupDescription">Sub Group Description</label>
+		<input type="text" name="subGroupDescription" id="subGroupDescription" class="text ui-widget-content ui-corner-all" />
+	</fieldset>
+	</form>
+</div>
 
+<!--Delete dialog form window-->
+<div id="delete-sub-group-dialog-form" title="Delete user Sub group">
+	<p class="validateTips">Delete User Syb Group</p>
+
+	<form>
+	<fieldset>
+		<label for="groupDescription">Delete user sub groups with id:</label>
+		<div id="subGroupsIds"><div>
+                <input type="hidden" name="rowsToDeleteString" id="subGroupsIdsString" />
+	</fieldset>
+	</form>
+</div>

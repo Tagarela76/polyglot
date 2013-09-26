@@ -39,7 +39,7 @@ require_once('classes/adminUserGroup.class.php');
 require_once('classes/polyglotUserGroup.class.php');
 require_once('functions/functions.php');
 require_once('functions/functions.php');
-require_once('functions/functions.php');
+//require_once('assets/ajax/saveUserGroup.php');
 
 $wpAdmin = new adminUserGroup();
 

@@ -8,7 +8,8 @@ $groupId = $_POST['groupId'];
 
 if(isset($groupId)){
     $results = $wpdb->get_results( "SELECT * FROM ".$table." WHERE group_id=".$groupId, ARRAY_A);
-    $html = '<tr class="active" >
+    if (!empty($results)) {
+        $html = '<tr class="active" >
                 <td width="10%">
                     select
                 </td>
@@ -19,19 +20,22 @@ if(isset($groupId)){
                     Sub Group Name
                 </td>
             </tr>';
-    foreach($results as $result){
-        $html.='<tr class="success">
+        foreach ($results as $result) {
+            $html.='<tr class="success">
             <td width="10%">
-                <input type=\'checkbox\' id="sub_group_'.$result['description'].'"
-                       value="'.$result['description'].'">
+                <input type=\'checkbox\' id="sub_group_' . $result['description'] . '"
+                       value="' . $result['id'] . '">
             </td>
             <td width="10%">
-                '.$result['id'].'
+                ' . $result['id'] . '
             </td>
             <td width="80%">
-                '.$result['description'].'
+                ' . $result['description'] . '
             </td>
         </tr>';
+        }
+    }else{
+        $html = "No sub groups! Please add some!";
     }
     echo $html;
 }

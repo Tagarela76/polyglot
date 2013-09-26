@@ -1,5 +1,6 @@
 $ = jQuery;
 $(function() {
+    
     var groupDescription = $("#groupDescription"),
             allFields = $([]).add(groupDescription),
             tips = $(".validateTips");
@@ -33,7 +34,7 @@ $(function() {
             return true;
         }
     }
-
+    //add user group dialog
     $("#dialog-form").dialog({
         autoOpen: false,
         height: 300,
@@ -65,7 +66,7 @@ $(function() {
         }
     });
 
-
+    //delete user group dialog
     $("#delete-dialog-form").dialog({
         autoOpen: false,
         height: 300,
@@ -96,6 +97,70 @@ $(function() {
         }
     });
     
+    //add user Sub group dialog
+    $("#dialog-add-sub-group-form").dialog({
+        autoOpen: false,
+        height: 300,
+        width: 350,
+        modal: true,
+        buttons: {
+            "Add Sub Group": function() {
+                var that = this;
+                var description = $('#subGroupDescription').val();
+                var groupId = $('#userGroupList').val();
+                var ajaxurl = '../wp-content/plugins/polyglot-user-group/assets/ajax/userSubGroupSettings.php';
+                var data = {
+                    action: 'add_sub_group',
+                    description: description,
+                    groupId: groupId
+                };
+                
+                $.post(ajaxurl, data, function(response) {
+            		$('#subGroupDescription').val('');
+                        $(that).dialog("close");
+                        getUserSubGroup();
+                        
+                });
+            },
+            Cancel: function() {
+                $(this).dialog("close");
+            }
+        },
+        close: function() {
+            allFields.val("").removeClass("ui-state-error");
+        }
+    });
+    
+    //delete user sub group dialog
+    $("#delete-sub-group-dialog-form").dialog({
+        autoOpen: false,
+        height: 300,
+        width: 350,
+        modal: true,
+        buttons: {
+            "DELETE": function() {
+                var that = this;
+                var groupIds = $('#subGroupsIds').html();
+                
+                var ajaxurl = '../wp-content/plugins/polyglot-user-group/assets/ajax/userSubGroupSettings.php';
+                var data = {
+                    action: 'delete_sub_groups',
+                    groupIds: groupIds
+                };
+                
+                $.post(ajaxurl, data, function(response) {
+                        $(that).dialog("close");
+                        getUserSubGroup();
+                });
+            },
+            Cancel: function() {
+                $(this).dialog("close");
+            }
+        },
+        close: function() {
+            allFields.val("").removeClass("ui-state-error");
+        }
+    });
     //open add group dialog
     $("#create-user-group")
             .button()
@@ -110,6 +175,25 @@ $(function() {
         var openDialog = getRowsToDelete();
         if(openDialog){
             $("#delete-dialog-form").dialog("open");
+        }else{
+            alert('check user group first');
+        }
+    });
+    
+    //open add user Sub group dialog
+    $("#create-user-subGroup")
+            .button()
+            .click(function() {
+        $("#dialog-add-sub-group-form").dialog("open");
+    });
+    
+    //open delete user Sub group dialog
+    $("#delete-user-subGroup")
+            .button()
+            .click(function() {
+        var openDialog = getUserSubGroupsToDelete();
+        if(openDialog){
+            $("#delete-sub-group-dialog-form").dialog("open");
         }else{
             alert('check user group first');
         }
@@ -135,6 +219,26 @@ function getRowsToDelete()
         return false;
     }
     $('#rowsForDelete').html(rowsToDeleteToString);
+    return true;
+}
+
+function getUserSubGroupsToDelete()
+{
+    var rowsToDelete = new Array();
+    var rowsToDeleteToString = "";
+    var checkboxes = $("#userSubGroupContainer").find("input[type='checkbox']");
+
+    checkboxes.each(function(i) {
+        var id = this.value;
+        if (this.checked) {
+            rowsToDelete.push(id);
+        }
+    });
+    rowsToDeleteToString = rowsToDelete.join(',');
+    if(rowsToDeleteToString==''){
+        return false;
+    }
+    $('#subGroupsIds').html(rowsToDeleteToString);
     return true;
 }
 
