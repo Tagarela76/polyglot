@@ -30,6 +30,8 @@
 global $wpdb;
 
 define('USER_GROUP_TABLE_NAME', $wpdb->prefix.'user_group');
+define('SUB_GROUP_MENU_SETTINGS_TABLE_NAME', $wpdb->prefix.'sub_group_menu_settings');
+
 define('WP_PLUGIN_DIR', 'polyglot-user-group');
 
 define( 'PUG_PLUGIN_DIR', WP_PLUGIN_DIR . '/polyglot-user-group');
@@ -38,14 +40,14 @@ define( 'PUG_PLUGIN_DIR', WP_PLUGIN_DIR . '/polyglot-user-group');
 require_once('classes/adminUserGroup.class.php');
 require_once('classes/polyglotUserGroup.class.php');
 require_once('functions/functions.php');
-require_once('functions/functions.php');
+//require_once('functions/functions.php');
 //require_once('assets/ajax/saveUserGroup.php');
 
 $wpAdmin = new adminUserGroup();
 
 register_activation_hook( __FILE__, array( $wpAdmin, 'wpActivateUserGroupPlugin' ) );
-register_deactivation_hook( __FILE__, array( $wpAdmin, 'wpDeactivateUserGroupPlugin' ));
-
+//register_deactivation_hook( __FILE__, array( $wpAdmin, 'wpDeactivateUserGroupPlugin' ));
+register_uninstall_hook( __FILE__, array( $wpAdmin, 'wpDeactivateUserGroupPlugin' ));
 //register_uninstall_hook( __FILE__, 'wpDeactivateUserGroupPlugin');
 /**
  * add plugin to admin menu

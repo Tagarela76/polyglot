@@ -26,6 +26,7 @@ function polyglotUserGroupStylesInit() {
     wp_register_script('dialog', WP_PLUGIN_URL.'/polyglot-user-group/assets/js/jquery.ui.dialog.js');
     wp_register_script('effect', WP_PLUGIN_URL.'/polyglot-user-group/assets/js/jquery.ui.effect.js');
     wp_register_script('addUserGroupDialog', WP_PLUGIN_URL.'/polyglot-user-group/assets/js/addUserGroupDialog.js');
+    wp_register_script('menuSettings.js', WP_PLUGIN_URL.'/polyglot-user-group/assets/js/menuSettings.js');
     
     //wp_enqueue_script('jquery-1.9.1');
     wp_enqueue_script('core');
@@ -38,7 +39,7 @@ function polyglotUserGroupStylesInit() {
     wp_enqueue_script('dialog');
     wp_enqueue_script('effect');
     wp_enqueue_script('addUserGroupDialog');
-
+    wp_enqueue_script('menuSettings.js');
 }
 
 

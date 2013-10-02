@@ -5,16 +5,16 @@ $(function() {
             allFields = $([]).add(groupDescription),
             tips = $(".validateTips");
 
-    function updateTips(t) {
+    /*function updateTips(t) {
         tips
                 .text(t)
                 .addClass("ui-state-highlight");
         setTimeout(function() {
             tips.removeClass("ui-state-highlight", 1500);
         }, 500);
-    }
+    }*/
 
-    function checkLength(o, n, min, max) {
+    /*function checkLength(o, n, min, max) {
         if (o.val().length > max || o.val().length < min) {
             o.addClass("ui-state-error");
             updateTips("Length of " + n + " must be between " +
@@ -23,9 +23,9 @@ $(function() {
         } else {
             return true;
         }
-    }
+    }*/
 
-    function checkRegexp(o, regexp, n) {
+    /*function checkRegexp(o, regexp, n) {
         if (!(regexp.test(o.val()))) {
             o.addClass("ui-state-error");
             updateTips(n);
@@ -33,7 +33,7 @@ $(function() {
         } else {
             return true;
         }
-    }
+    }*/
     //add user group dialog
     $("#dialog-form").dialog({
         autoOpen: false,
@@ -44,16 +44,17 @@ $(function() {
             "Add Group": function() {
                 var that = this;
                 var description = groupDescription.val();
-                var ajaxurl = '../wp-content/plugins/polyglot-user-group/assets/ajax/saveUserGroup.php';
+                var ajaxurl = '../wp-content/plugins/polyglot-user-group/assets/ajax/userGroupSettings.php';
                 var data = {
-                    action: 'my_action_callback',
+                    action: 'add_group',
                     description: description
                 };
                 
                 $.post(ajaxurl, data, function(response) {
-            		$("#groupDescription").val('');
+                    console.log(response);
+            	/*	$("#groupDescription").val('');
                         $(that).dialog("close");
-                        location.reload();
+                        location.reload();*/
                         
                 });
             },
@@ -76,9 +77,10 @@ $(function() {
             "DELETE": function() {
                 var that = this;
                 var groupIds = $('#rowsForDelete').html();
-                var ajaxurl = '../wp-content/plugins/polyglot-user-group/assets/ajax/deleteUserGroup.php';
+                var ajaxurl = '../wp-content/plugins/polyglot-user-group/assets/ajax/userGroupSettings.php';
                 var data = {
-                    groupIds: groupIds
+                    groupIds: groupIds,
+                    action: 'delete_groups'
                 };
                 
                 $.post(ajaxurl, data, function(response) {

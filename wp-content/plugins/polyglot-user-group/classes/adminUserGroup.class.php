@@ -27,6 +27,13 @@ class adminUserGroup
                  `description` varchar(2000) CHARACTER SET utf8 NOT NULL,
                   UNIQUE KEY `id` (`id`)
                   ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1");
+        
+        $wpdb->query("CREATE TABLE IF NOT EXISTS ". SUB_GROUP_MENU_SETTINGS_TABLE_NAME ." (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `sub_group_id` int(11) NOT NULL,
+                `menu_settings` varchar(2000) NOT NULL,
+                PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1");
     }
 
     /**

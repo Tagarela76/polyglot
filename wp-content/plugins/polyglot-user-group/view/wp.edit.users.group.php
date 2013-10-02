@@ -1,5 +1,8 @@
 <?php
 $polyglotUserGroups = getPolyglotUserGroups();
+//get menu
+$menuName = 'header menu';
+$menuItems = wp_get_nav_menu_items($menuName);
 ?>
 <style>
 		body { font-size: 62.5%; }
@@ -13,6 +16,7 @@ $polyglotUserGroups = getPolyglotUserGroups();
 		.ui-dialog .ui-state-error { padding: .3em; }
 		.validateTips { border: 1px solid transparent; padding: 0.3em; }
 </style>
+<h1>Group Setting</h1>
 <div style="margin-top: 10px">
 <table class="table table-condensed table-bordered table table-striped" id="userGroupContainer">
     <tr class="active" >
@@ -45,6 +49,7 @@ $polyglotUserGroups = getPolyglotUserGroups();
 </div>
 <input type="button" value='Create Group' class="btn" id="create-user-group">
 <input type="button" value='Delete Groups' class="btn" id="delete-user-group">
+<h1>Sub Group Setting</h1>
 <div style="margin-top: 10px">
 <select onchange="getUserSubGroup()" id="userGroupList">
     <?php foreach($polyglotUserGroups as $polyglotUserGroup){ ?>
@@ -63,6 +68,50 @@ $polyglotUserGroups = getPolyglotUserGroups();
 
 <input type="button" value='Create Sub Group' class="btn" id="create-user-subGroup">
 <input type="button" value='Delete Sub Groups' class="btn" id="delete-user-subGroup">
+
+<!--menu settings-->
+<!--<h1>Menu Settings</h1>
+
+<div>
+    <select onchange="getSubGroupList()" id="menuSettingGroupList">
+        <?php foreach($polyglotUserGroups as $polyglotUserGroup){ ?>
+            <option value="<?php echo $polyglotUserGroup->getId() ?>">
+                <?php echo $polyglotUserGroup->getDescription(); ?>
+            </option>
+        <?php } ?>
+    </select>
+    
+    <select id="menuSettingSubGroupList">
+    </select>
+</div>
+
+<div>
+    
+    <div>
+        <table class="table-bordered table-striped table" id="menuItemsSetting">
+            <tr>
+                <td>
+                    Show menu
+                </td>
+                <td>
+                    Menu Description
+                </td>
+            </tr>
+            <?php foreach ($menuItems as $menuItem) { ?>
+                <tr>
+                    <td>
+                        <input type ="checkbox" value="<?php echo $menuItem->ID?>">
+                    </td>
+                    <td>
+                        <?php echo $menuItem->title ?>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+        <input type="button" value='Save Menu Settings' class="btn" id="saveMenuSettings" onclick="saveSubGroupMenuSettings()">
+    </div>
+</div>-->
+
 <!--Dialog window-->
 <div id="dialog-form" title="Create new user">
 	<p class="validateTips">Add new User Group</p>
@@ -110,3 +159,5 @@ $polyglotUserGroups = getPolyglotUserGroups();
 	</fieldset>
 	</form>
 </div>
+
+                    

@@ -353,7 +353,7 @@ a:hover {
 	font-size: 30px;
 	line-height: 36px;
 	margin: 0 0 18px 0;
-	width: 700px;
+	width: 300px;
 }
 #site-title a {
 	color: #000;
@@ -362,10 +362,10 @@ a:hover {
 }
 #site-description {
 	clear: right;
-	float: right;
+	float: left;
 	font-style: italic;
 	margin: 15px 0 18px 0;
-	width: 220px;
+	width: 500px;
 }
 
 /* This is the custom header image */
